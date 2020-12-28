@@ -27,7 +27,7 @@ public class ClientEntity {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "clientEntity")
     private List<PurchaseEntity> purchaseEntities;
 
     public Integer getId() {
