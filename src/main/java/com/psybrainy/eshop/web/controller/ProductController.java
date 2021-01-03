@@ -2,6 +2,10 @@ package com.psybrainy.eshop.web.controller;
 
 import com.psybrainy.eshop.domain.Product;
 import com.psybrainy.eshop.domain.service.ProductService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,30 +22,44 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping("/all")
+    @ApiOperation("Devuelve los productos de Adango")
+    @ApiResponse(code = 200, message = "OK")
     public ResponseEntity<List<Product>> getAll(){
         return new ResponseEntity<>(productService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") int productId){
+    @ApiOperation("Busca el porducto por ID")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "Producto No Encontrado")
+    })
+    public ResponseEntity<Product> getProduct(@ApiParam(value = "El ID del producto", required = true, example = "2") @PathVariable("id") int productId){
         return productService.getProductById(productId)
                 .map(product -> new ResponseEntity<>(product, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<List<Product>> getByName(@PathVariable("name") String name){
+    @ApiOperation("Busca el poducto por Nombre")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 404, message = "Producto No Encontrado")
+    })
+    public ResponseEntity<List<Product>> getByName(@ApiParam(value = "El Nombre del producto", required = true, example = "2") @PathVariable("name") String name){
         return productService.getByName(name)
                 .map(products -> new ResponseEntity<>(products, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/save")
+    @ApiOperation("Introduce un producto")
     public ResponseEntity<Product> save(@RequestBody Product product){
         return new ResponseEntity<>(productService.save(product), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/delete/{id}")
+    @ApiOperation("Borra un producto")
     public ResponseEntity delete(@PathVariable("id") int productId){
         if (productService.delete(productId)){
             return new ResponseEntity(HttpStatus.OK);
