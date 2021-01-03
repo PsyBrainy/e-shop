@@ -13,6 +13,9 @@ public class PurchaseEntity {
     @Column(name = "puchase_id")
     private Integer purchaseId;
 
+    @Column(name = "client_id")
+    private String clientId;
+
     @Column(name = "dateTime")
     private LocalDateTime dateTime;
 
@@ -20,7 +23,7 @@ public class PurchaseEntity {
     private String paymentMethod;
 
     @Column(name = "commit")
-    private String Commit;
+    private String commit;
 
     @Column(name = "status")
     private String status;
@@ -29,7 +32,7 @@ public class PurchaseEntity {
     @JoinColumn(name = "client_id", insertable = false, updatable = false)
     private ClientEntity clientEntity;
 
-    @OneToMany(mappedBy = "productEntity")
+    @OneToMany(mappedBy = "productEntity", cascade = {CascadeType.ALL})
     private List<PurchaseProductEntity> products;
 
     public Integer getPurchaseId() {
@@ -57,11 +60,11 @@ public class PurchaseEntity {
     }
 
     public String getCommit() {
-        return Commit;
+        return commit;
     }
 
     public void setCommit(String commit) {
-        Commit = commit;
+        this.commit = commit;
     }
 
     public String getStatus() {
@@ -86,5 +89,21 @@ public class PurchaseEntity {
 
     public void setProducts(List<PurchaseProductEntity> products) {
         this.products = products;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public ClientEntity getClientEntity() {
+        return clientEntity;
+    }
+
+    public void setClientEntity(ClientEntity clientEntity) {
+        this.clientEntity = clientEntity;
     }
 }
